@@ -16,6 +16,12 @@ const initialBlogs = [
   }
 ]
 
+beforeEach(async () => {
+  await Blog.deleteMany({})
+  const blogObject = new Blog(initialBlogs[0])
+  await blogObject.save()
+})
+
 test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
@@ -42,13 +48,29 @@ test('a valid blog can be added', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
   
-  const blogs = await Blog.find({})
-  const blogsAtEnd = blogs.map(blog => blog.toJSON())
-  expect(blogsAtEnd).toHaveLength(initialBlogs.length + 1)
-  const titles = blogsAtEnd.map(r => r.title)
+  const response = await api.get('/api/blogs')
+  const titles = response.body.map(r => r.title)
+  expect(response.body).toHaveLength(initialBlogs.length + 1)
   expect(titles).toContain(
     'async/await simplifies making async calls'
   )
+})
+
+test('delete a blog', async () => {
+  const responseAtStart = await api.get('/api/blogs')
+  const blogsAtStart = responseAtStart.body
+
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const responseAtEnd = await api.get('/api/blogs')
+  const blogsAtEnd = responseAtEnd.body
+  expect(blogsAtStart).toHaveLength(1)
+  expect(blogsAtEnd).toHaveLength(0)
+  expect(blogsAtEnd).toEqual([])
 })
 
 
