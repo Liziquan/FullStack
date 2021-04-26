@@ -1,18 +1,23 @@
-import React,{ useState } from 'react'
+import React from 'react'
 
 
-const BlogForm = ({handleBlogCreate})=>{
-    const [title, setTitle] = useState('')
-    const [author, setAuthor] = useState('')
-    const [url, setUrl] = useState('')
-    return (
-        <div>
-            <h2>create new</h2>
-            title:<input type="text" value={title} name="Title" onChange={({ target }) => setTitle(target.value)}/>
-            author:<input type="text" value={author} name="Author" onChange={({ target }) => setAuthor(target.value)}/>
-            url:<input type="text" value={url} name="Url" onChange={({ target }) => setUrl(target.value)}/>
-            <button onClick={handleBlogCreate}>create</button>
-        </div>
-    )
-}
+const BlogForm = ({
+  addBlog,
+  newTitle,
+  handleTitleChange,
+  newAuthor,
+  handleAuthorChange,
+  newUrl,
+  handleUrlChange
+}) => (
+  <div>
+    <form onSubmit={addBlog}>
+      <h2>create new</h2>
+      <div>title:<input id="title" value={newTitle} onChange={handleTitleChange}/></div>
+      <div>author:<input id="author" value={newAuthor} onChange={handleAuthorChange}/></div>
+      <div>url:<input id="url" value={newUrl} onChange={handleUrlChange}/></div>
+      <button id="create" type="submit">create</button>
+    </form>
+  </div>
+)
 export default BlogForm
