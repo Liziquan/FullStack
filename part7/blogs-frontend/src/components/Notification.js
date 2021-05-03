@@ -13,9 +13,11 @@ const Notification = () => {
     color: notification.type === 'success' ? 'green' : 'red',
     background: 'lightgrey'
   }
-  return <div style={style}>
+  return (
+  <div style={style}>
     {notification.message}
   </div>
+  )
 }
 
 export default Notification

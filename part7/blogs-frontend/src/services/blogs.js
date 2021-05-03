@@ -1,10 +1,10 @@
 import axios from 'axios'
-import storage from '../utils/storage'
 const baseUrl = '/api/blogs'
 
 const getConfig = () => {
+
   return {
-    headers: { Authorization: `bearer ${storage.loadUser().token}` }
+    headers: { Authorization: `bearer ${JSON.parse(window.localStorage.getItem('loggedInBloglistUser')).token}` }
   }
 }
 
@@ -28,4 +28,10 @@ const deleteBlog = (id) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, deleteBlog }
+const addComment = (id,comment) => {
+  const request = axios.post(`${baseUrl}/${id}/comments`, comment, getConfig())
+  return request.then(response => response.data)
+}
+
+
+export default { getAll, create, update, deleteBlog, addComment }
